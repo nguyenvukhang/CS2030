@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+NAME='cs-inst'
+IMG='cs-img'
+
+CURR_ID=$(docker ps -a -q -f name=$NAME)
+
+if [ -z $CURR_ID ]; then
+  # no id exists. create a new container
+  docker run -v $PWD/work:/home/docker/work -td --name $NAME $IMG
+else
+  # id exists. start it
+  docker start $NAME
+fi

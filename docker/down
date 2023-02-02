@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+NAME='cs-inst'
+IMG='cs-img'
+
+docker stop $NAME
