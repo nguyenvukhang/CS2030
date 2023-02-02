@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+
+docker build -t brew4k/cs .

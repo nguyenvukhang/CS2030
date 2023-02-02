@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+# https://docs.docker.com/engine/reference/commandline/exec
+
+docker exec --interactive --tty --user docker cs-inst bash

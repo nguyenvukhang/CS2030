@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 NAME='cs-inst'
-IMG='brew4k/cs'
+IMG='cs-img'
 
 CURR_ID=$(docker ps -a -q -f name=$NAME)
 
