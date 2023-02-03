@@ -1,0 +1,12 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  ci:
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo ${{ secrets.DOCKER_ACCESS_TOKEN }} | docker login --username brew4k --password-stdin
+      - uses: actions/checkout@v3
+      - run: cd docker-dev && sh build && docker push brew4k/cs
