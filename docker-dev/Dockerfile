@@ -15,6 +15,8 @@ WORKDIR /home/$USERNAME
 
 VOLUME work work
 
+USER $USERNAME
+
 # copy neovim configs over
 RUN mkdir -p .config/nvim/ftplugin .config/nvim/lua .local/jdtls
 COPY nvim/init.lua .config/nvim/init.lua
@@ -22,10 +24,9 @@ COPY nvim/ftplugin/java.lua .config/nvim/ftplugin/java.lua
 COPY nvim/lua/paq.lua .config/nvim/lua/paq.lua
 COPY nvim/lua/plugins.lua .config/nvim/lua/plugins.lua
 
-RUN chown -R $USERNAME /home/$USERNAME
-
-USER $USERNAME
 RUN nvim --headless -u NONE -c 'lua require("plugins").bootstrap_paq()'
 
 COPY ./jdt/jdt-language-server-1.20.0-202302020244.tar.gz .local/jdtls/jdtls.tar.gz
 RUN cd .local/jdtls && tar -xf jdtls.tar.gz
+
+RUN chown -R $USERNAME /home/$USERNAME
