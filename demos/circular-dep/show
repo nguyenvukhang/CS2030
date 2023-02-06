@@ -1,0 +1,1 @@
+nvim -c "e Customer.java" -c "vs" -c "e Server.java"

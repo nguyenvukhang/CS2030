@@ -1,0 +1,539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr" lang="en">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <title>CodeCrunch</title>
+    <!-- START NUS Includes-->
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="lab2_files/nusbase.css"
+      media="screen, print, projection, handheld"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="lab2_files/nusmenu.css"
+      media="screen, print, projection, handheld"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="lab2_files/nusscreen.css"
+      media="screen, projection, print"
+    />
+    <link
+      href="https://codecrunch.comp.nus.edu.sg/nus/favicon.ico"
+      rel="shortcut icon"
+      type="image/vnd.microsoft.icon"
+    />
+    <link
+      rel="apple-touch-icon"
+      href="https://codecrunch.comp.nus.edu.sg/nus/blank.png"
+    />
+    <!-- END NUS Includes -->
+    <link rel="stylesheet" href="lab2_files/style.css" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="lab2_files/jquery.tablesorter.css"
+      type="text/css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="lab2_files/jquery.rating.css"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="lab2_files/style.css" type="text/css" />
+    <link rel="stylesheet" href="lab2_files/tagcloud.css" type="text/css" />
+    <link
+      rel="stylesheet"
+      href="lab2_files/jquery-ui-1.7.2.custom.css"
+      type="text/css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="lab2_files/jquery.ui.plupload.css"
+      type="text/css"
+    />
+  </head>
+
+  <body>
+    <!-- START NUS-Header -->
+
+    <!-- NUS Header -->
+    <div id="nusheader" class="nusbody">
+      <div class="nuslogodiv">
+        <a href="https://www.nus.edu.sg/">
+          <img class="nuslogo" src="lab2_files/soclogo.png" alt="" />
+        </a>
+      </div>
+    </div>
+    <!-- END NUS-Header -->
+
+    <div id="container">
+      <div id="outer">
+        <div id="inner">
+          <div id="content_full">
+            <div class="content-header"><h3>CS2030 (2220) Lab #2</h3></div>
+            <div class="spacer"></div>
+            <div class="panel">
+              <div class="task-content">
+                <h2>Lab #2</h2>
+                <p>
+                  The server and customer interactions from the previous lab can
+                  be broken down into a series of activities or events. Based on
+                  whether the server is available or busy serving another
+                  customer, there are two event transitions:
+                </p>
+                <ul>
+                  <li>
+                    <tt>ARRIVE → SERVE</tt>: a new customer arrives, then gets
+                    served immediately; or
+                  </li>
+                  <li>
+                    <tt>ARRIVE → LEAVE</tt>: a new customer arrives, then
+                    leaves.
+                  </li>
+                </ul>
+
+                We include another event transition:
+
+                <ul>
+                  <li>
+                    <tt>SERVE → DONE</tt>: a server is done serving a customer.
+                  </li>
+                </ul>
+
+                <p>
+                  Notice that when a customer arrives and a server is available,
+                  the <tt>SERVE</tt> event follows right after
+                  <tt>ARRIVE</tt> and the <tt>DONE</tt> event occurs sometime in
+                  future.
+                </p>
+                <pre>ARRIVE → SERVE → <i>after some time...</i><!-- &hellip; --> → DONE
+</pre>
+
+                <p>
+                  An event occurs at a particular time, and each event alters
+                  the state of the system and may generate more events. We call
+                  this a <i>discrete event simulator</i> as states remain
+                  unchanged between two events, which allows the simulation to
+                  jump from the time of one event to another.
+                </p>
+                <p>
+                  Processing events <i>in the right way</i> requires the use of
+                  an event priority queue. While Java provides the
+                  <tt>PriorityQueue</tt> class which is a mutable collection
+                  (like <tt>ArrayList</tt>), we have provided our own
+                  <tt>PQ</tt> class that is immutable, as well as an
+                  accompanying <tt>Pair</tt> class.
+                </p>
+                <blockquote>
+                  <table cellpadding="3" border="1">
+                    <tbody>
+                      <tr>
+                        <td>
+                          The given programs
+                          <tt
+                            ><a
+                              href="https://codecrunch.comp.nus.edu.sg/taskfile.php/5492/PQ.java"
+                              >PQ.java</a
+                            ></tt
+                          >,
+                          <tt
+                            ><a
+                              href="https://codecrunch.comp.nus.edu.sg/taskfile.php/5492/Pair.java"
+                              >Pair.java</a
+                            ></tt
+                          >
+                          and
+                          <tt
+                            ><a
+                              href="https://codecrunch.comp.nus.edu.sg/ImList.java"
+                              >ImList.java</a
+                            ></tt
+                          >
+                          include
+                          <a
+                            target="_blank"
+                            href="https://www.comp.nus.edu.sg/~cs2030/javadoc/"
+                            >javadoc comments</a
+                          >. To automatically generate HTML documentation from
+                          the comments, issue the command:
+
+                          <pre>
+$ javadoc -d doc Pair.java PQ.java ImList.java
+</pre
+                          >
+
+                          <p>
+                            You may then navigate through the documentation from
+                            <tt>allclasses-index.html</tt> found in the
+                            <tt>doc</tt> directory.
+                          </p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </blockquote>
+
+                <p>
+                  During the lecture, we have seen how an <tt>ImList</tt> of
+                  integers can be sorted by passing an integer
+                  <tt>Comparator</tt> to the <tt>sort</tt> method.
+                </p>
+                <pre>
+jshell&gt; List&lt;Integer&gt; list = new ImList&lt;Integer&gt;(List.of(1, 2, 3))
+list ==&gt; [1, 2, 3]
+
+jshell&gt; class IntComp implements Comparator&lt;Integer&gt; {
+   ...&gt;    public int compare(Integer i, Integer j) { 
+   ...&gt;       return j - i; 
+   ...&gt;    }
+   ...&gt; }
+|  created class IntComp
+
+jshell&gt; list.sort(new IntComp())
+list ==&gt; [3, 2, 1]
+</pre
+                >
+
+                <p>
+                  Similarly, a priority queue requires a sort order in which to
+                  prioritize elements in the queue. The following shows how a
+                  <tt>PQ</tt> of integers can be constructed by passing in an
+                  integer <tt>Comparator</tt>.
+                </p>
+                <pre>
+jshell&gt; PQ&lt;Integer&gt; pq = new PQ&lt;Integer&gt;(new IntComp())
+pq ==&gt; []
+</pre
+                >
+
+                <p>
+                  We can add elements to the priority queue via the
+                  <tt>add</tt> method.
+                </p>
+                <pre>
+jshell&gt; pq.add(1)
+$.. ==&gt; [1]
+
+jshell&gt; pq // note that pq is immutable
+pq ==&gt; []
+
+jshell&gt; pq = pq.add(1).add(2).add(3)
+pq ==&gt; [3, 1, 2]
+</pre
+                >
+
+                <p>
+                  You will also notice that the output of elements in a priority
+                  queue is not necessarily in order. What matters most is the
+                  values returned from the <tt>poll</tt> method.
+                </p>
+                <pre>
+jshell&gt; pq.poll()
+$.. ==&gt; (3, [2, 1])
+</pre
+                >
+
+                <p>
+                  Due to the immutable nature of <tt>PQ</tt>, the
+                  <tt>poll</tt> method requires two <i>values</i> to be
+                  returned, the highest priority element as well as the priority
+                  queue after removing the element. These are encapsulated in a
+                  generic <tt>Pair</tt> object, and the individual values can be
+                  retrieved via the <tt>first</tt> and <tt>second</tt> methods.
+                </p>
+                <pre>
+jshell&gt; Pair&lt;Integer, PQ&lt;Integer&gt;&gt; pr = pq.poll()
+pr ==&gt; (3, [2, 1])
+
+jshell&gt; pr.first()
+$.. ==&gt; 3
+
+jshell&gt; pq = pr.second()
+pq ==&gt; [2, 1]
+</pre
+                >
+
+                <p>
+                  The following shows how the priority queue can be subsequently
+                  polled until the queue becomes empty.
+                </p>
+                <pre>
+jshell&gt; pr = pq.poll()
+pr ==&gt; (2, [1])
+
+jshell&gt; pq = pr.second()
+pq ==&gt; [1]
+
+jshell&gt; pq.isEmpty()
+$.. ==&gt; false
+
+jshell&gt; pr = pq.poll()
+pr ==&gt; (1, [])
+
+jshell&gt; pq = pr.second()
+pq ==&gt; []
+
+jshell&gt; pq.isEmpty()
+$.. ==&gt; true
+</pre
+                >
+
+                <p>
+                  We are now ready to process our events using <tt>PQ</tt>. As
+                  usual, we create arrival events for all customer arrival and
+                  service times. However, rather than processing them right
+                  away, we add them into a priority queue that is ordered in
+                  terms of events. Events are ordered by earliest occurrence of
+                  the event, and in the case of ties, by order in which the
+                  customer arrives.
+                </p>
+                <p>
+                  Having included all arrival events in the priority queue, we
+                  can begin processing the queue:
+                </p>
+                <ul>
+                  <li>poll an event from the queue</li>
+                  <li>
+                    if necessary, generate the next event using the current
+                    state of the server and add into the queue
+                  </li>
+                </ul>
+
+                <p>
+                  Repeate the above until the queue is empty. Remember to update
+                  the server along the way.
+                </p>
+                <p>
+                  Once again, the
+                  <tt
+                    ><a
+                      href="https://codecrunch.comp.nus.edu.sg/taskfile.php/5492/Main.java"
+                      >Main</a
+                    ></tt
+                  >
+                  class has been provided to you.
+                </p>
+                <pre>
+import java.util.Scanner;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        ImList&lt;Double&gt; arrivalTimes = new ImList&lt;Double&gt;();
+        ImList&lt;Double&gt; serviceTimes = new ImList&lt;Double&gt;();
+
+        int numOfServers = sc.nextInt();
+        while (sc.hasNextDouble()) {
+            arrivalTimes = arrivalTimes.add(sc.nextDouble());
+            serviceTimes = serviceTimes.add(sc.nextDouble());
+        }
+
+        Simulator sim = new Simulator(numOfServers, arrivalTimes, serviceTimes);
+        System.out.println(sim.simulate());
+        sc.close();
+    }
+}
+</pre
+                >
+
+                <p>
+                  Sample runs of the program using the same input as in Lab 1 is
+                  given below.
+                </p>
+                <pre>
+$ cat 1.in
+3
+0.500 1.000
+0.600 1.000
+0.700 1.000
+
+$ java Main &lt; 1.in
+0.500 1 arrives
+0.500 1 serves by 1
+0.600 2 arrives
+0.600 2 serves by 2
+0.700 3 arrives
+0.700 3 serves by 3
+1.500 1 done serving by 1
+1.600 2 done serving by 2
+1.700 3 done serving by 3
+[3 0]
+
+$ cat 2.in
+3
+0.500 1.000
+0.600 1.000
+0.700 1.000
+1.500 1.000
+1.600 2.000
+1.700 3.000
+
+$ java Main &lt; 2.in
+0.500 1 arrives
+0.500 1 serves by 1
+0.600 2 arrives
+0.600 2 serves by 2
+0.700 3 arrives
+0.700 3 serves by 3
+1.500 1 done serving by 1
+1.500 4 arrives
+1.500 4 serves by 1
+1.600 2 done serving by 2
+1.600 5 arrives
+1.600 5 serves by 2
+1.700 3 done serving by 3
+1.700 6 arrives
+1.700 6 serves by 3
+2.500 4 done serving by 1
+3.600 5 done serving by 2
+4.700 6 done serving by 3
+[6 0]
+
+$ cat 3.in
+2
+0.500 1.000
+0.600 1.000
+0.700 1.000
+
+$ java Main &lt; 3.in
+0.500 1 arrives
+0.500 1 serves by 1
+0.600 2 arrives
+0.600 2 serves by 2
+0.700 3 arrives
+0.700 3 leaves
+1.500 1 done serving by 1
+1.600 2 done serving by 2
+[2 1]
+
+$ cat 4.in
+2
+0.500 1.000
+0.600 1.000
+1.500 1.000
+
+$ java Main &lt; 4.in
+0.500 1 arrives
+0.500 1 serves by 1
+0.600 2 arrives
+0.600 2 serves by 2
+1.500 1 done serving by 1
+1.500 3 arrives
+1.500 3 serves by 1
+1.600 2 done serving by 2
+2.500 3 done serving by 1
+[3 0]
+
+$ cat 5.in
+2
+0.500 1.100
+0.600 0.900
+0.700 0.700
+1.500 0.100
+1.600 0.200
+1.700 0.300
+
+$ java Main &lt; 5.in
+0.500 1 arrives
+0.500 1 serves by 1
+0.600 2 arrives
+0.600 2 serves by 2
+0.700 3 arrives
+0.700 3 leaves
+1.500 2 done serving by 2
+1.500 4 arrives
+1.500 4 serves by 2
+1.600 1 done serving by 1
+1.600 4 done serving by 2
+1.600 5 arrives
+1.600 5 serves by 1
+1.700 6 arrives
+1.700 6 serves by 2
+1.800 5 done serving by 1
+2.000 6 done serving by 2
+[5 1]
+</pre
+                >
+
+                <h2>Some tips...</h2>
+
+                <p>
+                  As the problem increases in complexity, you have to learn how
+                  to simplify the original problem so that you can solve them
+                  incrementally. For example, using JShell
+                </p>
+                <ul>
+                  <li>
+                    start by experimenting with the <tt>PQ</tt> and be familiar
+                    with how <tt>add</tt> and <tt>poll</tt> works. You can just
+                    follow through the preamble section of this document.
+                  </li>
+                  <li>
+                    define a general event class with a timestamp and experiment
+                    with the <tt>PQ</tt> of events.
+                  </li>
+                  <li>
+                    make the event class a parent and include arrival event as
+                    the child; don't worry about the other events. At this point
+                    of time, your event <tt>PQ</tt> should just work (adding and
+                    polling) with arrival events since arrival events are
+                    events.
+                  </li>
+                  <li>
+                    include the leave event (since it's simplest) such that when
+                    an arrival event gets polled, it should generate a leave
+                    event and add to the <tt>PQ</tt>. This leave event should be
+                    the next one polled from the <tt>PQ</tt>.
+                  </li>
+                  <li>
+                    till now, we did not pay much attention to the status of the
+                    servers. Include the serve event (skip done event for the
+                    moment) which will update the "state" of the servers. Think
+                    of how the "update" should be done in order to make it
+                    effect-free. Since a new state of servers has to be created,
+                    think of how to include this into <tt>PQ</tt> processing
+                    which ultimately drives the simulation.
+                  </li>
+                  <li>
+                    if you are able to reach this point, you will realize that
+                    the output of your program will be no different from the
+                    previous lab. Now it is a matter of including the done
+                    event.
+                  </li>
+                </ul>
+
+                <p>
+                  Although you could have gotten the correct output without
+                  using events and/or the priority queue, do note that there
+                  will be more events later, so it is always good to prepare
+                  early.
+
+                  <!--
+<p>You should check your program styling by issuing the following command:
+
+<pre>
+$ checkstyle *.java
+</pre>
+-->
+                </p>
+              </div>
+            </div>
+            <input type="hidden" id="tid" name="tid" value="5492" />
+          </div>
+          <!-- end content -->
+        </div>
+        <!-- end inner -->
+      </div>
+      <!-- end outer -->
+    </div>
+    <!-- end container -->
+  </body>
+</html>
